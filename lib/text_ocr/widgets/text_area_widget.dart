@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scan_it/pdfmaker.dart';
 
 class TextAreaWidget extends StatelessWidget {
   final String text;
@@ -25,12 +26,16 @@ class TextAreaWidget extends StatelessWidget {
           ),
         ),
       ),
-      const SizedBox(width: 8),
       IconButton(
         icon: Icon(Icons.copy, color: Colors.black),
         color: Colors.grey[200],
         onPressed: onClickedCopy,
       ),
+      IconButton(
+        onPressed: () async {
+          await generatePDF(text);
+        },
+        icon: Icon(Icons.picture_as_pdf),),
     ],
   );
 }

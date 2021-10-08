@@ -30,9 +30,6 @@ class ControlsWidget extends StatelessWidget {
         onPressed: onClickedPickImage,
         icon: Icon(Icons.camera,size: 40.0,),
       ),
-
-
-
     ],
   );
 }
