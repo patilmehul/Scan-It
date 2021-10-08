@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan_it/text_ocr/api/api.dart';
 import 'package:scan_it/text_ocr/widgets/text_area_widget.dart';
@@ -23,6 +24,8 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   File f=File('images/dummy.jpeg');
   File image = File('images/dummy.jpeg');
 
+  bool isEmpty = true;
+
   @override
   Widget build(BuildContext context) => Expanded(
     child: Column(
@@ -32,7 +35,7 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
         ControlsWidget(
           onClickedPickImage: pickImage,
           onClickedScanText: scanText,
-          onClickedClear: clear,
+          onClickedPickImageGallery: pickImageGallery,
         ),
         const SizedBox(height: 16),
         TextAreaWidget(
@@ -44,13 +47,20 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   );
 
   Widget buildImage() => Container(
-    child: image != f
+    child: !isEmpty
         ? Image.file(image)
         : Icon(Icons.photo, size: 80, color: Colors.black),
   );
 
   Future pickImage() async {
     final file = await ImagePicker().getImage(source: ImageSource.camera);
+    Fluttertoast.showToast(msg: "Image Captured");
+    setImage(File(file!.path));
+  }
+
+  Future pickImageGallery() async {
+    final file = await ImagePicker().getImage(source: ImageSource.gallery);
+    Fluttertoast.showToast(msg: "Image Selected");
     setImage(File(file!.path));
   }
 
@@ -62,6 +72,7 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
     );
 
     final text = await FirebaseMLApi.recogniseText(image);
+    Fluttertoast.showToast(msg: "Scanning Successful");
     setText(text);
 
     Navigator.of(context).pop();
@@ -75,11 +86,13 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   void copyToClipboard() {
     if (text.trim() != '') {
       FlutterClipboard.copy(text);
+      Fluttertoast.showToast(msg: "Copied to Clipboard");
     }
   }
 
   void setImage(File newImage) {
     setState(() {
+      isEmpty = false;
       image = newImage;
     });
   }

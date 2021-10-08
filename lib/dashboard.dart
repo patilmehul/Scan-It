@@ -62,6 +62,7 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Fluttertoast.showToast(msg: "Loading Scanner...");
           Navigator.push(context, MaterialPageRoute(builder: (ctx)=> OCR(title: "Scan a document")));
         },
         child: Icon(Icons.camera),

@@ -3,29 +3,36 @@ import 'package:flutter/material.dart';
 class ControlsWidget extends StatelessWidget {
   final VoidCallback onClickedPickImage;
   final VoidCallback onClickedScanText;
-  final VoidCallback onClickedClear;
+  final VoidCallback onClickedPickImageGallery;
 
   const ControlsWidget({
     required this.onClickedPickImage,
     required this.onClickedScanText,
-    required this.onClickedClear,
+    required this.onClickedPickImageGallery,
     key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      RaisedButton(
-        onPressed: onClickedPickImage,
-        child: Text('Scan a document'),
+      IconButton(
+        onPressed: onClickedPickImageGallery,
+        icon: Icon(Icons.photo_album,size: 40.0,),
       ),
-      const SizedBox(width: 12),
-      RaisedButton(
+
+      ElevatedButton(
         onPressed: onClickedScanText,
         child: Text('Recognize Text'),
       ),
-      const SizedBox(width: 12),
+
+      IconButton(
+        onPressed: onClickedPickImage,
+        icon: Icon(Icons.camera,size: 40.0,),
+      ),
+
+
+
     ],
   );
 }
