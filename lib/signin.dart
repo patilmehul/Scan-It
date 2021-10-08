@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
@@ -15,9 +14,9 @@ class Authentication {
   Future<String?> signInwithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
-      await _googleSignIn.signIn();
+          await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount!.authentication;
+          await googleSignInAccount!.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
@@ -25,13 +24,13 @@ class Authentication {
 
       await _auth.signInWithCredential(credential).then((value) {
         if (value.additionalUserInfo!.isNewUser) {
-          FirebaseFirestore.instance.collection('users')
+          FirebaseFirestore.instance
+              .collection('users')
               .doc(value.user!.uid)
               .set({
             'lastSignedIn': DateTime.now(),
-            'movies': [],
-          })
-              .then((value) => print("Collection created"));
+            'previousFiles':[]
+          }).then((value) => print("Collection created"));
         }
       });
     } on FirebaseAuthException catch (e) {
@@ -39,7 +38,15 @@ class Authentication {
       throw e;
     }
   }
+
+  Future<void> signOutFromGoogle() async{
+    await _googleSignIn.signOut();
+    await _auth.signOut();
+  }
+
 }
+
+
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -52,40 +59,36 @@ class _SignInState extends State<SignIn> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
         backgroundColor: Colors.grey,
         body: isLoading
             ? Center(
-          child: CircularProgressIndicator(),
-        )
-            :
-        ElevatedButton(
-          child: Text("SignIn with Google"),
-          onPressed: () async {
-            setState(() {
-              isLoading = true;
-            });
-            Authentication _authentication = Authentication();
-            try {
-              await _authentication
-                  .signInwithGoogle()
-                  .whenComplete(() {
-                Fluttertoast.showToast(msg: "Signed In!");
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (ctx) => Dashboard()));
-              });
-            } catch (e) {
-              if (e is FirebaseAuthException) {
-                Fluttertoast.showToast(
-                    msg: "Error occurred while signing in...!");
-              }
-            }
-          },
-        ));
-
-
+                child: CircularProgressIndicator(),
+              )
+            : Center(
+                child: ElevatedButton(
+                  child: Text("SignIn with Google"),
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    Authentication _authentication = Authentication();
+                    try {
+                      await _authentication.signInwithGoogle().whenComplete(() {
+                        Fluttertoast.showToast(msg: "Signed In!");
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (ctx) => Dashboard()));
+                      });
+                    } catch (e) {
+                      if (e is FirebaseAuthException) {
+                        Fluttertoast.showToast(
+                            msg: "Error occurred while signing in...!");
+                      }
+                    }
+                  },
+                ),
+              ));
   }
 }
