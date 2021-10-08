@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scan_it/home.dart';
+import 'package:scan_it/scanner.dart';
+
 import 'package:scan_it/signin.dart';
 
 class Dashboard extends StatefulWidget {
@@ -20,7 +22,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${_auth.currentUser!.displayName}'s Scans"),
+        title: Text("${_auth.currentUser!.displayName!}'s Scans"),
         actions: [
           CircleAvatar(
             backgroundImage: NetworkImage(_auth.currentUser!.photoURL!),
@@ -58,6 +60,12 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (ctx)=> Scanner()));
+        },
+        child: Icon(Icons.camera),
       ),
       body: StreamBuilder(
         stream: users.doc(_auth.currentUser!.uid).snapshots(),
