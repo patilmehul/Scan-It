@@ -18,18 +18,14 @@ class ControlsWidget extends StatelessWidget {
     children: [
       RaisedButton(
         onPressed: onClickedPickImage,
-        child: Text('Pick Image'),
+        child: Text('Scan a document'),
       ),
       const SizedBox(width: 12),
       RaisedButton(
         onPressed: onClickedScanText,
-        child: Text('Scan For Text'),
+        child: Text('Recognize Text'),
       ),
       const SizedBox(width: 12),
-      RaisedButton(
-        onPressed: onClickedClear,
-        child: Text('Clear'),
-      )
     ],
   );
 }

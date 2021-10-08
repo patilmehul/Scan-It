@@ -20,6 +20,7 @@ class TextRecognitionWidget extends StatefulWidget {
 
 class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   String text = '';
+  File f=File('images/dummy.jpeg');
   File image = File('images/dummy.jpeg');
 
   @override
@@ -43,13 +44,13 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   );
 
   Widget buildImage() => Container(
-    child: image != null
+    child: image != f
         ? Image.file(image)
         : Icon(Icons.photo, size: 80, color: Colors.black),
   );
 
   Future pickImage() async {
-    final file = await ImagePicker().getImage(source: ImageSource.gallery);
+    final file = await ImagePicker().getImage(source: ImageSource.camera);
     setImage(File(file!.path));
   }
 
@@ -67,7 +68,7 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   }
 
   void clear() {
-    // setImage('');
+    setImage(f);
     setText('');
   }
 

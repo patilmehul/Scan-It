@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scan_it/home.dart';
 import 'package:scan_it/text_ocr/ocr.dart';
-import 'package:scan_it/scanner.dart';
-
 import 'package:scan_it/signin.dart';
 
 class Dashboard extends StatefulWidget {
@@ -64,7 +62,7 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (ctx)=> OCR(title: "Trail")));
+          Navigator.push(context, MaterialPageRoute(builder: (ctx)=> OCR(title: "Scan a document")));
         },
         child: Icon(Icons.camera),
       ),
