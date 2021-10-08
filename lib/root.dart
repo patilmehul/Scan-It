@@ -1,3 +1,5 @@
+//root page for app
+
 import 'package:flutter/material.dart';
 class Root extends StatefulWidget {
   @override
