@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scan_it/home.dart';
+import 'package:scan_it/text_ocr/ocr.dart';
 import 'package:scan_it/scanner.dart';
 
 import 'package:scan_it/signin.dart';
@@ -63,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (ctx)=> Scanner()));
+          Navigator.push(context, MaterialPageRoute(builder: (ctx)=> OCR(title: "Trail")));
         },
         child: Icon(Icons.camera),
       ),
