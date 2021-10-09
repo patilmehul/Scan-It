@@ -3,11 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pdftron_flutter/pdftron_flutter.dart';
 import 'package:scan_it/home.dart';
-import 'package:scan_it/pdf/api/pdf_api.dart';
 import 'package:scan_it/text_ocr/ocr.dart';
 import 'package:scan_it/signin.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+
 
 class Dashboard extends StatefulWidget {
   @override
@@ -87,36 +88,43 @@ class _DashboardState extends State<Dashboard> {
                 );
               }
               else{
-                Map file={};
+
                 return ListView.builder(
                   itemCount: previousFiles.length,
                   itemBuilder: (BuildContext ctx,int index){
-                    file=previousFiles[index];
-                    DateTime d=file['date'];
-                    return GestureDetector(
+                    // DateTime d=file['date'];
+                    return ListTile(
                       onTap: ()async{
                         try{
-                         await canLaunch(file['fileUrl']);
+                          print(previousFiles[index]['fileUrl']);
+                          await PdftronFlutter.openDocument(previousFiles[index]['fileUrl']);
                         }
                         catch(e){
                           Fluttertoast.showToast(msg: "An Error Occurred!");
                         }
                       },
-                      child: ListTile(
-                        tileColor: Colors.blueGrey[400],
-                        title: Text(file['title']+".pdf"),
-                        subtitle: Text("${d.day}"+" "+"${d.month}"+" "+"${d.year}"),
-                        trailing: IconButton(
-                          onPressed: ()async{
-                            dynamic d = await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).get();
-                            List l=d['previousFile'];
-                            l.removeAt(index);
-                            await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).update({
-                              'previousFiles':l,
-                            }).then((value) => Fluttertoast.showToast(msg: "Deleted Successfully!"));
-                          },
-                          icon: Icon(Icons.delete),),
-                      ),
+                      tileColor: Colors.blueGrey[400],
+                      title: Text(previousFiles[index]['title']+".pdf"),
+                      // subtitle: Text("${d.day}"+" "+"${d.month}"+" "+"${d.year}"),
+                      trailing: IconButton(
+                        onPressed: ()async{
+                          try{
+                            dynamic data = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+                            List array = data['previousFiles'];
+                            array.removeAt(index);
+                            print(array);
+                            await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+                                {
+                                  'previousFiles': array,
+                                }
+                            ).then((value) => print("Success"));
+                            Fluttertoast.showToast(msg: "Successfully Deleted...");
+
+                          }catch(e){
+                            Fluttertoast.showToast(msg: "An Error occured while Deleting...");
+                          }
+                        },
+                        icon: Icon(Icons.delete),),
                     );
                   }
                 );
