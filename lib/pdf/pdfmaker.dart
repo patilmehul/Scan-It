@@ -7,21 +7,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path/path.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:scan_it/pdf/api/pdf_api.dart';
 
 Future<void> generatePDF(String text, File image) async {
-  // final document = pw.Document();
-  // document.addPage(
-  //   pw.Page(
-  //     build: (pw.Context context) => pw.Center(
-  //       child: pw.Text(text),
-  //     ),
-  //   ),
-  // );
+  
   FirebaseAuth _auth=FirebaseAuth.instance;
-  final file = image;
-  String fileName = basename(image.path);
+  
+  final pdf = await PdfApi.generateCenteredText(text);
+   
+  String fileName = basename(pdf.path);
   Reference reference =FirebaseStorage.instance.ref().child("${_auth.currentUser!.displayName! + "/" + fileName}");
-  UploadTask uploadTask = reference.putFile(file);
+  UploadTask uploadTask = reference.putFile(pdf);
   TaskSnapshot snapshot = await uploadTask;
   String fileUrl = await snapshot.ref.getDownloadURL();
   print(fileUrl);

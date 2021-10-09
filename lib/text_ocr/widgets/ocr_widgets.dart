@@ -4,7 +4,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scan_it/pdfmaker.dart';
+import 'package:scan_it/pdf/pdfmaker.dart';
 import 'package:scan_it/text_ocr/api/api.dart';
 
 import 'control_widgets.dart';
