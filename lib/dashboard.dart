@@ -44,7 +44,9 @@ class _DashboardState extends State<Dashboard> {
                                 onPressed: () {
                                   Navigator.pop(ctx);
                                 },
-                                child: Text("NO")),
+                                child: Text("NO"),
+                                style:ElevatedButton.styleFrom(primary: Colors.blueGrey)
+                            ),
                             ElevatedButton(
                                 onPressed: () async {
                                   await _authentication
@@ -58,7 +60,9 @@ class _DashboardState extends State<Dashboard> {
                                             builder: (c) => Home()));
                                   });
                                 },
-                                child: Text("YES")),
+                                child: Text("YES"),
+                                style:ElevatedButton.styleFrom(primary: Colors.blueGrey)
+                            ),
                           ],
                         );
                       });
@@ -69,6 +73,7 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blueGrey,
         onPressed: () {
           Fluttertoast.showToast(msg: "Loading Scanner...");
           Navigator.push(context, MaterialPageRoute(builder: (ctx)=> OCR(title: "Scan a document")));

@@ -24,6 +24,7 @@ class ControlsWidget extends StatelessWidget {
       ElevatedButton(
         onPressed: onClickedScanText,
         child: Text('Recognize Text'),
+        style:ElevatedButton.styleFrom(primary: Colors.blueGrey)
       ),
 
       IconButton(

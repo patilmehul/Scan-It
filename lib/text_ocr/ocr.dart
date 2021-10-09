@@ -16,6 +16,7 @@ class _OCRState extends State<OCR> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      backgroundColor: Colors.blueGrey,
       title: Text(widget.title),
     ),
     body: Padding(

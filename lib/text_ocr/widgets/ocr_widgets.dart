@@ -139,7 +139,9 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
                                 await generatePDF(text, pdfName, image, context);
                                 Navigator.pop(context);
                               }, 
-                              child: Text("Convert to Pdf"))
+                              child: Text("Convert to Pdf"),
+                              style:ElevatedButton.styleFrom(primary: Colors.blueGrey))
+
                           ],
                         );
                       }
