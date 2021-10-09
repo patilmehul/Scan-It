@@ -1,11 +1,13 @@
 // ignore_for_file: unused_import, unnecessary_statements
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-
-Future<void> generatePDF(String text) async{
+Future<void> generatePDF(String text) async {
   final document = pw.Document();
   document.addPage(
     pw.Page(
@@ -14,6 +16,12 @@ Future<void> generatePDF(String text) async{
       ),
     ),
   );
+  FirebaseAuth _auth=FirebaseAuth.instance;
   final file = File('example.pdf');
-  await file.writeAsBytes(await document.save());
+  Reference reference =FirebaseStorage.instance.ref().child("${_auth.currentUser!.displayName!}'s files");
+  UploadTask uploadTask = reference.putFile(file);
+  TaskSnapshot snapshot = await uploadTask;
+  String fileUrl = await snapshot.ref.getDownloadURL();
+  print(fileUrl);
+  Fluttertoast.showToast(msg: "URL Received");
 }
