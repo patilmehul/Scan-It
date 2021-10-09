@@ -123,19 +123,15 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
                       context: context, 
                       builder: (context){
                         return AlertDialog(
-                          content: Column(
-                            children: [
-                              TextFormField(
-                                onChanged: (val){
-                                  setState(() {
-                                    pdfName=val;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Enter the name for pdf file"
-                                ),
-                              ),
-                            ],
+                          content: TextFormField(
+                            onChanged: (val){
+                              setState(() {
+                                pdfName=val;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Enter the name for pdf file"
+                            ),
                           ),
                           actions: [
                             ElevatedButton(

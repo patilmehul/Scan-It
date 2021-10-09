@@ -13,8 +13,9 @@ import 'package:scan_it/pdf/api/pdf_api.dart';
 
 Future<void> generatePDF(String text, String pdfName,File image,BuildContext ctx) async {
   try{
+    print(pdfName);
     FirebaseAuth _auth=FirebaseAuth.instance;
-    CollectionReference users=FirebaseFirestore.instance.collection('users');
+    // CollectionReference users=FirebaseFirestore.instance.collection('users');
     final pdf = await PdfApi.generateCenteredText(text,pdfName);
    
     String fileName = basename(pdf.path);
@@ -23,15 +24,17 @@ Future<void> generatePDF(String text, String pdfName,File image,BuildContext ctx
     TaskSnapshot snapshot = await uploadTask;
     String fileUrl = await snapshot.ref.getDownloadURL();
 
-    dynamic d = users.doc(_auth.currentUser!.uid).get();
-    
+    dynamic d = await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).get();
+
     List l=d['previousFiles'];
+    print(l);
     l.add({
       'title':pdfName,
       'fileUrl':fileUrl,
       'date':DateTime.now(),
     });
-    await users.doc(_auth.currentUser!.uid).update(
+    print(l);
+    await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).update(
       {
         'previousFiles':l,
       }
