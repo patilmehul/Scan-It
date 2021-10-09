@@ -20,6 +20,7 @@ class TextRecognitionWidget extends StatefulWidget {
 
 class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   String text = '';
+  String pdfName="";
   File f = File('images/dummy.jpeg');
   File image = File('images/dummy.jpeg');
 
@@ -117,8 +118,35 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
                 IconButton(
                   icon: Icon(Icons.picture_as_pdf, color: Colors.black),
                   color: Colors.grey[200],
-                  onPressed: ()async{
-                    await generatePDF(text, image).then((value) => Fluttertoast.showToast(msg: "Success"));
+                  onPressed: (){
+                    showDialog(
+                      context: context, 
+                      builder: (context){
+                        return AlertDialog(
+                          content: Column(
+                            children: [
+                              TextFormField(
+                                onChanged: (val){
+                                  setState(() {
+                                    pdfName=val;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Enter the name for pdf file"
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: ()async{
+                                await generatePDF(text, pdfName, image, context);
+                              }, 
+                              child: Text("Convert to Pdf"))
+                          ],
+                        );
+                      }
+                    );
                   },
                 ),
               ],

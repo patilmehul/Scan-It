@@ -91,7 +91,7 @@ class _DashboardState extends State<Dashboard> {
                   itemBuilder: (BuildContext ctx,int index){
                     file=previousFiles[index];
                     return ListTile(
-                      title: Text(file['fileName']),
+                      title: Text(file['title']),
                     );
                   }
                 );

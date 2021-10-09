@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
 
 class PdfApi {
-  static Future<File> generateCenteredText(String text) async {
+  static Future<File> generateCenteredText(String text,String pdfName) async {
     final pdf = Document();
 
     pdf.addPage(Page(
@@ -14,7 +14,7 @@ class PdfApi {
       ),
     ));
 
-    return saveDocument(name: 'my_example.pdf', pdf: pdf);
+    return saveDocument(name: pdfName, pdf: pdf);
   }
 
   static Future<File> saveDocument({
