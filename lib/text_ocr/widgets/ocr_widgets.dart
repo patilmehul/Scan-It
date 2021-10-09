@@ -4,6 +4,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:scan_it/pdfmaker.dart';
 import 'package:scan_it/text_ocr/api/api.dart';
 
 import 'control_widgets.dart';
@@ -112,6 +113,13 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
                   icon: Icon(Icons.copy, color: Colors.black),
                   color: Colors.grey[200],
                   onPressed: copyToClipboard,
+                ),
+                IconButton(
+                  icon: Icon(Icons.picture_as_pdf, color: Colors.black),
+                  color: Colors.grey[200],
+                  onPressed: ()async{
+                    await generatePDF(text, image).then((value) => Fluttertoast.showToast(msg: "Success"));
+                  },
                 ),
               ],
             )
