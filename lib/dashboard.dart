@@ -22,43 +22,47 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("${_auth.currentUser!.displayName!}'s Scans"),
         actions: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(_auth.currentUser!.photoURL!),
-            child: GestureDetector(
-              onTap: () async {
-                showDialog(
-                    context: context,
-                    builder: (ctx) {
-                      return AlertDialog(
-                        content: Text("Are you sure you want to Logout?"),
-                        actions: [
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                              },
-                              child: Text("NO")),
-                          ElevatedButton(
-                              onPressed: () async {
-                                await _authentication
-                                    .signOutFromGoogle()
-                                    .then((value) {
-                                  Fluttertoast.showToast(msg: "Signing out...");
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(_auth.currentUser!.photoURL!),
+              child: GestureDetector(
+                onTap: () async {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return AlertDialog(
+                          content: Text("Are you sure you want to Logout?"),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
                                   Navigator.pop(ctx);
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (c) => Home()));
-                                });
-                              },
-                              child: Text("YES")),
-                        ],
-                      );
-                    });
-              },
+                                },
+                                child: Text("NO")),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  await _authentication
+                                      .signOutFromGoogle()
+                                      .then((value) {
+                                    Fluttertoast.showToast(msg: "Signing out...");
+                                    Navigator.pop(ctx);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (c) => Home()));
+                                  });
+                                },
+                                child: Text("YES")),
+                          ],
+                        );
+                      });
+                },
+              ),
             ),
           ),
         ],
@@ -93,38 +97,41 @@ class _DashboardState extends State<Dashboard> {
                   itemCount: previousFiles.length,
                   itemBuilder: (BuildContext ctx,int index){
                     // DateTime d=file['date'];
-                    return ListTile(
-                      onTap: ()async{
-                        try{
-                          print(previousFiles[index]['fileUrl']);
-                          await PdftronFlutter.openDocument(previousFiles[index]['fileUrl']);
-                        }
-                        catch(e){
-                          Fluttertoast.showToast(msg: "An Error Occurred!");
-                        }
-                      },
-                      tileColor: Colors.blueGrey[400],
-                      title: Text(previousFiles[index]['title']+".pdf"),
-                      // subtitle: Text("${d.day}"+" "+"${d.month}"+" "+"${d.year}"),
-                      trailing: IconButton(
-                        onPressed: ()async{
+                    return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: ListTile(
+                        onTap: ()async{
                           try{
-                            dynamic data = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-                            List array = data['previousFiles'];
-                            array.removeAt(index);
-                            print(array);
-                            await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
-                                {
-                                  'previousFiles': array,
-                                }
-                            ).then((value) => print("Success"));
-                            Fluttertoast.showToast(msg: "Successfully Deleted...");
-
-                          }catch(e){
-                            Fluttertoast.showToast(msg: "An Error occured while Deleting...");
+                            print(previousFiles[index]['fileUrl']);
+                            await PdftronFlutter.openDocument(previousFiles[index]['fileUrl']);
+                          }
+                          catch(e){
+                            Fluttertoast.showToast(msg: "An Error Occurred!");
                           }
                         },
-                        icon: Icon(Icons.delete),),
+                        tileColor: Colors.blueGrey[400],
+                        title: Text(previousFiles[index]['title']+".pdf"),
+                        // subtitle: Text("${d.day}"+" "+"${d.month}"+" "+"${d.year}"),
+                        trailing: IconButton(
+                          onPressed: ()async{
+                            try{
+                              dynamic data = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+                              List array = data['previousFiles'];
+                              array.removeAt(index);
+                              print(array);
+                              await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+                                  {
+                                    'previousFiles': array,
+                                  }
+                              ).then((value) => print("Success"));
+                              Fluttertoast.showToast(msg: "Successfully Deleted...");
+
+                            }catch(e){
+                              Fluttertoast.showToast(msg: "An Error occured while Deleting...");
+                            }
+                          },
+                          icon: Icon(Icons.delete),),
+                      ),
                     );
                   }
                 );

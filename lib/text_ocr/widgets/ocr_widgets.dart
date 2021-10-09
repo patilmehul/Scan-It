@@ -29,7 +29,7 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   Widget buildImage() => Container(
         child: !isEmpty
             ? Image.file(image)
-            : Icon(Icons.photo, size: 80, color: Colors.black),
+            : Icon(Icons.photo, size: 80, color: Colors.blueGrey),
       );
 
   Future pickImage() async {
@@ -111,12 +111,12 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.copy, color: Colors.black),
+                  icon: Icon(Icons.copy, color: Colors.blueGrey),
                   color: Colors.grey[200],
                   onPressed: copyToClipboard,
                 ),
                 IconButton(
-                  icon: Icon(Icons.picture_as_pdf, color: Colors.black),
+                  icon: Icon(Icons.picture_as_pdf, color: Colors.blueGrey),
                   color: Colors.grey[200],
                   onPressed: (){
                     showDialog(

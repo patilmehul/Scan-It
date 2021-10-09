@@ -18,7 +18,7 @@ class ControlsWidget extends StatelessWidget {
     children: [
       IconButton(
         onPressed: onClickedPickImageGallery,
-        icon: Icon(Icons.photo_album,size: 40.0,),
+        icon: Icon(Icons.photo_album,size: 40.0,color: Colors.blueGrey,),
       ),
 
       ElevatedButton(
@@ -28,7 +28,7 @@ class ControlsWidget extends StatelessWidget {
 
       IconButton(
         onPressed: onClickedPickImage,
-        icon: Icon(Icons.camera,size: 40.0,),
+        icon: Icon(Icons.camera,size: 40.0,color: Colors.blueGrey,),
       ),
     ],
   );

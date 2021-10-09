@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:scan_it/dashboard.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -62,33 +63,54 @@ class _SignInState extends State<SignIn> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.white,
         body: isLoading
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : Center(
-                child: ElevatedButton(
-                  child: Text("SignIn with Google"),
-                  onPressed: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    Authentication _authentication = Authentication();
-                    try {
-                      await _authentication.signInwithGoogle().whenComplete(() {
-                        Fluttertoast.showToast(msg: "Signed In!");
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (ctx) => Dashboard()));
-                      });
-                    } catch (e) {
-                      if (e is FirebaseAuthException) {
-                        Fluttertoast.showToast(
-                            msg: "Error occurred while signing in...!");
-                      }
-                    }
-                  },
+            : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("ScanIt",style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: size.height* 0.06,
+
+                ),),
+                Image(
+                  image: AssetImage("images/logo.png"),
+                  height: size.height* 0.4,
+                  width: size.width*0.4,
                 ),
-              ));
+                Center(
+                    child: SignInButton(
+                      Buttons.GoogleDark,
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        Authentication _authentication = Authentication();
+                        try {
+                          await _authentication.signInwithGoogle().whenComplete(() {
+                            Fluttertoast.showToast(msg: "Signed In!");
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(builder: (ctx) => Dashboard()));
+                          });
+                        } catch (e) {
+                          if (e is FirebaseAuthException) {
+                            Fluttertoast.showToast(
+                                msg: "Error occurred while signing in...!");
+                          }
+                        }
+                      },
+                      ),
+
+                    ),
+              ],
+            ));
   }
 }
+
+
+
+
