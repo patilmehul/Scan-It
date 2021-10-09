@@ -80,6 +80,7 @@ class _DashboardState extends State<Dashboard> {
         },
         child: Icon(Icons.camera),
       ),
+
       body: StreamBuilder(
         stream: users.doc(_auth.currentUser!.uid).snapshots(),
         builder: (context,snapshots){
@@ -104,7 +105,7 @@ class _DashboardState extends State<Dashboard> {
                   itemBuilder: (BuildContext ctx,int index){
                     // DateTime d=file['date'];
                     return Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 12.0),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.0),
