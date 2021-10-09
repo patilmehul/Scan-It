@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scan_it/home.dart';
+import 'package:scan_it/pdf/api/pdf_api.dart';
 import 'package:scan_it/text_ocr/ocr.dart';
 import 'package:scan_it/signin.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -90,8 +92,31 @@ class _DashboardState extends State<Dashboard> {
                   itemCount: previousFiles.length,
                   itemBuilder: (BuildContext ctx,int index){
                     file=previousFiles[index];
-                    return ListTile(
-                      title: Text(file['title']),
+                    DateTime d=file['date'];
+                    return GestureDetector(
+                      onTap: ()async{
+                        try{
+                         await canLaunch(file['fileUrl']);
+                        }
+                        catch(e){
+                          Fluttertoast.showToast(msg: "An Error Occurred!");
+                        }
+                      },
+                      child: ListTile(
+                        tileColor: Colors.blueGrey[400],
+                        title: Text(file['title']+".pdf"),
+                        subtitle: Text("${d.day}"+" "+"${d.month}"+" "+"${d.year}"),
+                        trailing: IconButton(
+                          onPressed: ()async{
+                            dynamic d = await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).get();
+                            List l=d['previousFile'];
+                            l.removeAt(index);
+                            await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).update({
+                              'previousFiles':l,
+                            }).then((value) => Fluttertoast.showToast(msg: "Deleted Successfully!"));
+                          },
+                          icon: Icon(Icons.delete),),
+                      ),
                     );
                   }
                 );
