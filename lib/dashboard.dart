@@ -26,6 +26,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text("${_auth.currentUser!.displayName!}'s Scans"),
+        backgroundColor:Colors.blueGrey ,
         actions: [
           Padding(
             padding: EdgeInsets.all(8.0),
@@ -99,38 +100,45 @@ class _DashboardState extends State<Dashboard> {
                     // DateTime d=file['date'];
                     return Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: ListTile(
-                        onTap: ()async{
-                          try{
-                            print(previousFiles[index]['fileUrl']);
-                            await PdftronFlutter.openDocument(previousFiles[index]['fileUrl']);
-                          }
-                          catch(e){
-                            Fluttertoast.showToast(msg: "An Error Occurred!");
-                          }
-                        },
-                        tileColor: Colors.blueGrey[400],
-                        title: Text(previousFiles[index]['title']+".pdf"),
-                        // subtitle: Text("${d.day}"+" "+"${d.month}"+" "+"${d.year}"),
-                        trailing: IconButton(
-                          onPressed: ()async{
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          border:Border.all(color: Colors.black)
+                        ),
+                        child: ListTile(
+                          onTap: ()async{
                             try{
-                              dynamic data = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-                              List array = data['previousFiles'];
-                              array.removeAt(index);
-                              print(array);
-                              await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
-                                  {
-                                    'previousFiles': array,
-                                  }
-                              ).then((value) => print("Success"));
-                              Fluttertoast.showToast(msg: "Successfully Deleted...");
-
-                            }catch(e){
-                              Fluttertoast.showToast(msg: "An Error occured while Deleting...");
+                              print(previousFiles[index]['fileUrl']);
+                              await PdftronFlutter.openDocument(previousFiles[index]['fileUrl']);
+                            }
+                            catch(e){
+                              Fluttertoast.showToast(msg: "An Error Occurred!");
                             }
                           },
-                          icon: Icon(Icons.delete),),
+                          tileColor: Colors.white,
+
+                          title: Text(previousFiles[index]['title']+".pdf"),
+                          // subtitle: Text("${d.day}"+" "+"${d.month}"+" "+"${d.year}"),
+                          trailing: IconButton(
+                            onPressed: ()async{
+                              try{
+                                dynamic data = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+                                List array = data['previousFiles'];
+                                array.removeAt(index);
+                                print(array);
+                                await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+                                    {
+                                      'previousFiles': array,
+                                    }
+                                ).then((value) => print("Success"));
+                                Fluttertoast.showToast(msg: "Successfully Deleted...");
+
+                              }catch(e){
+                                Fluttertoast.showToast(msg: "An Error occured while Deleting...");
+                              }
+                            },
+                            icon: Icon(Icons.delete),),
+                        ),
                       ),
                     );
                   }
