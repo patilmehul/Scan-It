@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan_it/text_ocr/api/api.dart';
-import 'package:scan_it/text_ocr/widgets/text_area_widget.dart';
-
 
 import 'control_widgets.dart';
 
@@ -21,36 +19,16 @@ class TextRecognitionWidget extends StatefulWidget {
 
 class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
   String text = '';
-  File f=File('images/dummy.jpeg');
+  File f = File('images/dummy.jpeg');
   File image = File('images/dummy.jpeg');
 
   bool isEmpty = true;
 
-  @override
-  Widget build(BuildContext context) => Expanded(
-    child: Column(
-      children: [
-        Expanded(child: buildImage()),
-        const SizedBox(height: 16),
-        ControlsWidget(
-          onClickedPickImage: pickImage,
-          onClickedScanText: scanText,
-          onClickedPickImageGallery: pickImageGallery,
-        ),
-        const SizedBox(height: 16),
-        TextAreaWidget(
-          text: text,
-          onClickedCopy: copyToClipboard,
-        ),
-      ],
-    ),
-  );
-
   Widget buildImage() => Container(
-    child: !isEmpty
-        ? Image.file(image)
-        : Icon(Icons.photo, size: 80, color: Colors.black),
-  );
+        child: !isEmpty
+            ? Image.file(image)
+            : Icon(Icons.photo, size: 80, color: Colors.black),
+      );
 
   Future pickImage() async {
     final file = await ImagePicker().getImage(source: ImageSource.camera);
@@ -68,7 +46,8 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
     showDialog(
       builder: (context) => Center(
         child: CircularProgressIndicator(),
-      ), context: context,
+      ),
+      context: context,
     );
 
     final text = await FirebaseMLApi.recogniseText(image);
@@ -102,4 +81,41 @@ class _TextRecognitionWidgetState extends State<TextRecognitionWidget> {
       text = newText;
     });
   }
+
+  @override
+  Widget build(BuildContext context) => Expanded(
+        child: Column(
+          children: [
+            Expanded(child: buildImage()),
+            const SizedBox(height: 16),
+            ControlsWidget(
+              onClickedPickImage: pickImage,
+              onClickedScanText: scanText,
+              onClickedPickImageGallery: pickImageGallery,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(border: Border.all()),
+                    padding: EdgeInsets.all(8),
+                    alignment: Alignment.center,
+                    child: SelectableText(
+                      text.isEmpty ? 'Scan an Image to get text' : text,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.copy, color: Colors.black),
+                  color: Colors.grey[200],
+                  onPressed: copyToClipboard,
+                ),
+              ],
+            )
+          ],
+        ),
+      );
 }

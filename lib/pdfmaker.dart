@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<void> generatePDF(String text) async {
+Future<void> generatePDF(String text, File image) async {
   final document = pw.Document();
   document.addPage(
     pw.Page(

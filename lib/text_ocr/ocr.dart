@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scan_it/text_ocr/widgets/text_rec_widget.dart';
+import 'package:scan_it/text_ocr/widgets/ocr_widgets.dart';
 
 
 class OCR extends StatefulWidget {
